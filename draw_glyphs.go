@@ -13,17 +13,17 @@ import (
 //
 // If there are more than two glyphs, the glyphs are shown on multiple
 // rows and columns.
-func DrawGlyphSequence(glyph_names []string) image.Image {
+func DrawGlyphSequence(glyph_names []string, s Settings) image.Image {
 	var images []image.Image
 
 	for _, glyph_name := range glyph_names {
-		images = append(images, DrawOneGlyph(glyph_name))
+		images = append(images, DrawOneGlyph(glyph_name, s))
 	}
-	return squarePackImages(images)
+	return squarePackImages(images, s)
 }
 
 // squarePackImages packs multiple glyph images onto one image.
-func squarePackImages(images []image.Image) image.Image {
+func squarePackImages(images []image.Image, s Settings) image.Image {
 	num_glyphs := len(images)
 
 	// Work out how many rows and columns to display the glyphs in.
@@ -35,7 +35,7 @@ func squarePackImages(images []image.Image) image.Image {
 	rows := int(array_height)
 	cols := int(array_width)
 
-	SZ := int(IMAGE_SIZE)
+	SZ := int(s.ImageSize)
 	combined_image := image.NewRGBA(image.Rect(0, 0, SZ*cols, SZ*rows))
 
 	for n := 0; n < num_glyphs; n++ {
