@@ -7,8 +7,6 @@ import (
 	"math"
 )
 
-
-
 // draw_glyph_sequence draws the named glyphs onto an image canvas.
 //
 // If there are more than two glyphs, the glyphs are shown on multiple
