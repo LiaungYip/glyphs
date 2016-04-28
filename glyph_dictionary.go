@@ -56,7 +56,7 @@ var Glyphs = map[string][]string{
 	"373a8a":             {"Change", "Modify"},
 	"01051638456a8a":     {"Chaos", "Disorder"},
 	"0a3a":               {"Clear"},
-	"01050a1223343a45":   {"Close All", "Clearall"},
+	"01050a1223343a45":   {"Close All", "Clearall", "Clear All"}, // lws: Add "Clear All" alias
 	"698a9a":             {"Complex"},
 	"2649677889":         {"Conflict"},
 	"27597889":           {"Consequence"},
@@ -98,7 +98,7 @@ var Glyphs = map[string][]string{
 	"363969":             {"I", "Me"}, //"Self"
 	"27":                 {"Ignore"},
 	"6a898a9a":           {"Imperfect"},
-	"686a898a9a":         {"Imperfect"}, //NOTE: Scanner bug?
+	"686a898a9a":         {"Imperfect"}, //NOTE: Scanner bug? // lws: Lol, no. That's really how Imperfect is drawn.
 	"166a7a":             {"Improve"},
 	"3a898a9a":           {"Impure"},
 	"16486a899a":         {"Intelligence"},
