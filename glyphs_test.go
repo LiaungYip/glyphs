@@ -30,6 +30,10 @@ var lookupTests = []struct {
 	{"xM","XM","67697a898a"},
 	{"OPEN ALL","Open All","010512233437384578"}, // Test that things with spaces are accurately returned
 	{"enlightened","Enlightened","01091223696a9a"},
+	{"n'zeer","N'zeer","06090a3a6a9a"},
+	{"clear all","Clear All","01050a1223343a45"}, // Regression test. The "Clear All" alias for "Clearall" wasn't present in original data.
+	// Sustain
+	// Sustain All
 }
 
 func TestLookup(t *testing.T) {
@@ -42,6 +46,7 @@ func TestLookup(t *testing.T) {
 		if (g != tt.glyphName) || (e != tt.edgeList) {
 			t.Errorf("%s -> %s, %s. Wanted %s, %s.", tt.in, g, e, tt.glyphName, tt.edgeList)
 		}
+		t.Logf("Case `%s` -> `%s`, `%s` passed!", tt.in, tt.glyphName, tt.edgeList)
 	}
 }
 
