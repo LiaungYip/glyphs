@@ -4,6 +4,9 @@ import (
 	"testing"
 	"github.com/llgcode/draw2d/draw2dimg"
 
+	"fmt"
+	"sort"
+	"strings"
 )
 
 func TestDrawOneGlyph(t *testing.T) {
@@ -51,3 +54,22 @@ func TestLookup(t *testing.T) {
 }
 
 // TODO: Test that all glyph edge lists in the dictionary are in 'canonical form'
+
+func TestCanonicalOrdering(t *testing.T) {
+	for edgeList, glyphNames := range Glyphs {
+		var pairs []string
+		for i := 0; i < len(edgeList)/2; i++ {
+			pair := edgeList[i*2:i*2+2]
+			if pair[0] > pair[1] {
+				pair = string(pair[1]) + string(pair[0])
+			}
+			pairs = append(pairs, pair)
+		}
+		sort.Strings(pairs)
+		newlist := strings.Join(pairs,"")
+		if strings.Compare(edgeList, newlist) != 0 {
+			fmt.Println("Not canonical!", edgeList, "should be", newlist, glyphNames)
+		}
+		fmt.Println(edgeList)
+	}
+}
