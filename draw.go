@@ -34,7 +34,7 @@ func DrawOneGlyph(glyph_name string, s Settings) image.Image {
 	edge_list := getEdges(glyph_name)
 	drawEdges(gc, edge_list, s)
 
-	drawNumber(gc, 1)
+	//drawNumber(gc, 1)
 
 	return glyph_image
 }
