@@ -1,5 +1,10 @@
 package glyphs
 
+import (
+	"fmt"
+	"sort"
+)
+
 // The coded strings define the edges of the glyph.
 // I.e. "78": {"Simple"} - a single edge between node 7 to node 8.
 // "06092649": {"Attack", "War"} - four edges: 0-6, 0-9, 2-6, 4-9.
@@ -173,4 +178,29 @@ var Glyphs = map[string][]string{
 	//,"0609232734486789": {"{unknown},"},
 	//,"01061226": {"{unknown},"},
 	//,"090a373a69": {"{unknown},"},
+}
+
+// Contains a sorted, de-duplicated list of all glyph names.
+// Populated at package init() time
+var GlyphNames []string
+
+func uniqueGlyphNames(glyphList map[string][]string) []string {
+	// Use uniqueness of map keys, to discard duplicates.
+	uniquesMap := map[string]bool{}
+	for _, nameList := range glyphList {
+		for _, name := range nameList {
+			uniquesMap[name] = true
+		}
+	}
+	// Convert map keys into slice
+	var uniquesSlice []string
+	for k, _ := range uniquesMap {
+		uniquesSlice = append(uniquesSlice, k)
+	}
+	sort.Strings(uniquesSlice)
+	return uniquesSlice
+}
+
+func init() {
+	GlyphNames = uniqueGlyphNames(Glyphs)
 }

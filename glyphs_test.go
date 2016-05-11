@@ -1,10 +1,11 @@
 package glyphs
 
 import (
-	"testing"
 	"github.com/llgcode/draw2d/draw2dimg"
+	"testing"
 
 	"fmt"
+	"reflect"
 	"sort"
 	"strings"
 )
@@ -23,24 +24,24 @@ func TestDrawGlyphSequence(t *testing.T) {
 }
 
 var lookupTests = []struct {
-	in  string
+	in        string
 	glyphName string
-	edgeList string
+	edgeList  string
 }{
-	{"XM","XM","67697a898a"}, // Test that correct capitalisation is returned
-	{"xm","XM","67697a898a"},
-	{"Xm","XM","67697a898a"},
-	{"xM","XM","67697a898a"},
-	{"OPEN ALL","Open All","010512233437384578"}, // Test that things with spaces are accurately returned
-	{"enlightened","Enlightened","01091223696a9a"},
-	{"n'zeer","N'zeer","06090a3a6a9a"},
-	{"clear all","Clear All","01050a1223343a45"}, // Regression test. The "Clear All" alias for "Clearall" wasn't present in original data.
+	{"XM", "XM", "67697a898a"}, // Test that correct capitalisation is returned
+	{"xm", "XM", "67697a898a"},
+	{"Xm", "XM", "67697a898a"},
+	{"xM", "XM", "67697a898a"},
+	{"OPEN ALL", "Open All", "010512233437384578"}, // Test that things with spaces are accurately returned
+	{"enlightened", "Enlightened", "01091223696a9a"},
+	{"n'zeer", "N'zeer", "06090a3a6a9a"},
+	{"clear all", "Clear All", "01050a1223343a45"}, // Regression test. The "Clear All" alias for "Clearall" wasn't present in original data.
 	// Sustain
 	// Sustain All
 }
 
 func TestLookup(t *testing.T) {
-	for _, tt := range lookupTests{
+	for _, tt := range lookupTests {
 		g, e, err := Lookup(tt.in)
 		if err != nil {
 			t.Errorf("%s -> error! %s", tt.in, err.Error())
@@ -59,17 +60,35 @@ func TestCanonicalOrdering(t *testing.T) {
 	for edgeList, glyphNames := range Glyphs {
 		var pairs []string
 		for i := 0; i < len(edgeList)/2; i++ {
-			pair := edgeList[i*2:i*2+2]
+			pair := edgeList[i*2 : i*2+2]
 			if pair[0] > pair[1] {
 				pair = string(pair[1]) + string(pair[0])
 			}
 			pairs = append(pairs, pair)
 		}
 		sort.Strings(pairs)
-		newlist := strings.Join(pairs,"")
+		newlist := strings.Join(pairs, "")
 		if strings.Compare(edgeList, newlist) != 0 {
 			fmt.Println("Not canonical!", edgeList, "should be", newlist, glyphNames)
 		}
 		fmt.Println(edgeList)
+	}
+}
+
+var uniqueTestData = map[string][]string{
+	"010203": {"bob"},
+	"010204": {"charlie"},
+	"010205": {"alice"},
+	"010206": {"alice", "bob"},
+	"010207": {"bob", "charlie"},
+	"010208": {"alice", "charlie"},
+	"010209": {"alice", "bob", "charlie"},
+}
+
+func TestUniqueGlyphNames(t *testing.T) {
+	uniques := uniqueGlyphNames(uniqueTestData)
+	expected := []string{"alice", "bob", "charlie"}
+	if !reflect.DeepEqual(uniques, expected) {
+		t.Errorf("Expecting %s, got %s", expected, uniques)
 	}
 }
